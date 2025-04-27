@@ -24,7 +24,7 @@
 
     <div class="form-group mt-2">
         <button type="submit" class="btn btn-success"><i class="fa fa-save me-1"></i>Save Supplier</button>
-        <button type="button" class="btn btn-danger" @onclick="()=> HandleModalClose()"><i class="fa fa-times me-1"></i>Cancel</button>
+        <button type="button" class="btn btn-danger" @onclick="()=> Cancel()"><i class="fa fa-times me-1"></i>Cancel</button>
     </div>
 </EditForm>
 
@@ -38,7 +38,7 @@
         Navigation.NavigateTo("/supplierGrid");
     }
 
-    private void HandleModalClose()
+    private void Cancel()
     {
         Navigation.NavigateTo("/supplierGrid");
     }
