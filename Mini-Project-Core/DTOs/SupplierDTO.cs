@@ -10,7 +10,7 @@ namespace Mini_Project_Core.DTOs
     public class SupplierDTO
     {
         public string? CompanyCode { get; set; }
-        [Required(ErrorMessage = "Supplier Name is required.")]
+        [Required(ErrorMessage = "Company Name is required.")]
         public string CompanyName { get; set; } = null!;
         [Required(ErrorMessage = "Telephone Number is required.")]
         public string TelephoneNumber { get; set; } = null!;
