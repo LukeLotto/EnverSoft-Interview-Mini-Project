@@ -1,0 +1,45 @@
+﻿@page "/newSupplier"
+@inject NavigationManager Navigation
+@using Mini_Project_Core.DTOs
+
+<h3>Add Supplier</h3>
+
+<EditForm Model="supplier" OnValidSubmit="SaveSupplier">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label for="supplierCode">Company Code</label>
+        <InputText id="supplierCode" class="form-control" @bind-Value="supplier.CompanyCode" />
+    </div>
+    <div class="form-group">
+        <label for="supplierName">Company Name</label>
+        <InputText id="supplierName" class="form-control" @bind-Value="supplier.CompanyName" />
+        <ValidationMessage For="@(() => supplier.CompanyName)" />
+    </div>
+
+    <div class="form-group">
+        <label for="supplierPhone">Telephone Number</label>
+        <InputText id="supplierPhone" class="form-control" @bind-Value="supplier.TelephoneNumber" />
+        <ValidationMessage For="@(() => supplier.TelephoneNumber)" />
+    </div>
+
+    <div class="form-group mt-2">
+        <button type="submit" class="btn btn-success"><i class="fa fa-save me-1"></i>Save Supplier</button>
+        <button type="button" class="btn btn-danger" @onclick="()=> HandleModalClose()"><i class="fa fa-times me-1"></i>Cancel</button>
+    </div>
+</EditForm>
+
+@code {
+    private SupplierDTO supplier = new SupplierDTO();
+    HttpClient http = new HttpClient();
+
+    private async Task SaveSupplier()
+    {
+        await http.PostAsJsonAsync("https://localhost:7110/api/supplier/AddSupplier", supplier);
+        Navigation.NavigateTo("/supplierGrid");
+    }
+
+    private void HandleModalClose()
+    {
+        Navigation.NavigateTo("/supplierGrid");
+    }
+}

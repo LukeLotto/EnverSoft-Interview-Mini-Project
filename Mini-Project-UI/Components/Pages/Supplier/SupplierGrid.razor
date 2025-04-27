@@ -1,0 +1,72 @@
+﻿@page "/supplierGrid"
+@using Mini_Project_Core.DTOs
+@using Mini_Project_Core
+ @inject NavigationManager NavManager
+
+<h3>Suppliers</h3>
+<button class="btn btn-success btn-sm mb-2" type="button" @onclick="()=>AddSupplier()"><i class="fa fa-plus me-1"></i>Add Supplier</button>
+<div class="row">
+    <div class="col-6">
+        <input class="form-control form-control-sm" type="text" placeholder="Company Name" @bind-value="searchTerm"/>
+    </div>
+    <div class="col-6">
+        <button class="btn btn-primary btn-sm mb-2" @onclick='()=> searchTerm == "" ? FetchSuppliers(): FetchSuppliersByName()'><i class="fa fa-search me-1"></i>Search</button>
+    </div>
+</div>
+@if (!loadingSuppliers)
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Company Code</th>
+                <th>Company Name</th>
+                <th>Telephone Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Supplier supplier in suppliers)
+            {
+                <tr>
+                    <td>@supplier.CompanyCode</td>
+                    <td>@supplier.CompanyName</td>
+                    <td>@supplier.TelephoneNumber</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <span class="spinner-grow"></span>
+}
+@if (suppliers.Count <= 0 && !loadingSuppliers)
+{
+    <span class="text-danger">No results found</span>
+}
+@code {
+    private List<Supplier> suppliers = new List<Supplier>();
+    HttpClient httpClient = new HttpClient();
+    private bool loadingSuppliers = false;
+    private string searchTerm = "";
+    protected override async Task OnInitializedAsync()
+    {
+        await FetchSuppliers();
+    }
+    private void AddSupplier()
+    {
+        NavManager.NavigateTo("/newSupplier");
+    }
+
+    private async Task FetchSuppliers()
+    {
+        loadingSuppliers = true;
+        suppliers = await httpClient.GetFromJsonAsync<List<Supplier>>("https://localhost:7110/api/supplier/GetSuppliers");
+        loadingSuppliers = false;
+    }
+    private async Task FetchSuppliersByName()
+    {
+        loadingSuppliers = true;
+        suppliers = await httpClient.GetFromJsonAsync<List<Supplier>>($"https://localhost:7110/api/supplier/GetSupplierByName?companyName={searchTerm}");
+        loadingSuppliers = false;
+    }
+}
